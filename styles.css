@@ -1,0 +1,214 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: rgb(168, 224, 99);
+  background: linear-gradient(
+    14deg,
+    rgba(168, 224, 99, 1) 0%,
+    rgba(193, 233, 143, 1) 29%,
+    rgba(198, 230, 129, 1) 51%,
+    rgba(209, 224, 99, 1) 100%
+  );
+  font-family: Verdana (sans-serif);
+  overflow: hidden; /* Prevent scrolling */
+  position: relative;
+  letter-spacing: 1px;
+}
+
+a {
+  text-decoration: none;
+  color: darkgoldenrod;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* Jumping Lemon */
+#lemon {
+  cursor: pointer;
+  font-size: 8vw;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: jump 0.4s infinite alternate;
+  z-index: 10; /* Ensure lemon is above clouds */
+}
+
+#lemon-shadow {
+  position: absolute;
+  top: 60%; /* Adjust this to position the shadow below the lemon */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10vw; /* Adjust the size of the shadow */
+  height: 2vw; /* Adjust the height to make it look like a shadow */
+  background: rgba(0, 0, 0, 0.2); /* Shadow color */
+  border-radius: 50%; /* Make it oval-shaped */
+  filter: blur(5px); /* Blur the shadow for a more natural look */
+  animation: shadowAnimation 0.4s infinite alternate; /* Sync with the lemon's jump */
+}
+
+@keyframes shadowAnimation {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.8); /* Shrink the shadow when the lemon jumps */
+  }
+}
+
+@keyframes jump {
+  0% {
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    transform: translate(-50%, -100%);
+  }
+}
+
+/* Sparkles */
+.sparkle {
+  position: absolute;
+  font-size: 2vw;
+  animation: sparkleAnimation 1s ease-out;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes sparkleAnimation {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -150%) scale(0.5);
+  }
+}
+
+/* Clouds */
+.cloud {
+  position: absolute;
+  font-size: 10vw;
+  color: white;
+  animation: moveCloud linear infinite;
+  cursor: pointer;
+  z-index: 1; /* Ensure clouds are behind the lemon and other elements */
+}
+
+@keyframes moveCloud {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Form Container */
+#form-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  z-index: 10; /* Ensure it's above the frame */
+}
+
+#contact-form {
+  display: flex;
+  flex-direction: column;
+}
+
+#contact-form input,
+#contact-form textarea {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+#contact-form textarea {
+  resize: vertical;
+  height: 80px;
+}
+
+#contact-form button {
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#contact-form button:hover {
+  background-color: #45a049;
+}
+
+/* Info Container */
+#info-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: right;
+  width: 300px;
+  z-index: 10; /* Ensure it's above the frame */
+}
+
+#info-container p {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+#info-container p:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  /* Adjust lemon size for smaller screens */
+  #lemon {
+    font-size: 15vw;
+    top: 85%;
+  }
+
+  #lemon-shadow {
+    display: none;
+  }
+
+  #clouds-container {
+    display: none;
+  }
+
+  /* Stack form and info section vertically on small screens */
+  #form-container,
+  #info-container {
+    position: static;
+    width: 80%;
+    margin: 20px auto;
+  }
+
+  #info-container {
+    text-align: left;
+  }
+
+  /* Adjust body padding to avoid overlap with the frame */
+  body::before {
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+  }
+}

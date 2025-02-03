@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lima Limón Eventos</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Jumping Lemon -->
+    <div id="lemon">🍋</div>
+
+    <div id="lemon-shadow"></div>
+
+    <!-- Sparkles Container -->
+    <div id="sparkles-container"></div>
+
+    <!-- Clouds -->
+    <div id="clouds-container"></div>
+
+    <!-- Form in the bottom-left corner -->
+    <div id="form-container">
+      <div id="contact-form">
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="text" id="name" placeholder="Nombre" required />
+        <textarea
+          cols="2"
+          rows="2"
+          maxlength="500"
+          style="display: none"
+          name="message_honey"
+          id="message_honey"
+          type="text"
+        ></textarea>
+        <textarea id="message" placeholder="Consulta" required></textarea>
+        <button id="send-button" onclick="sendEmail()">Enviar</button>
+      </div>
+    </div>
+
+    <!-- Info section in the bottom-right corner -->
+    <div id="info-container">
+      <p><b>LIMA LIMÓN</b> eventos</p>
+      <p>
+        <a href="https://maps.app.goo.gl/bcHUkStA5ZEE6ohJ8" target="_blank"
+          >Gaucho Cruz 5366, Villa Bosch 1682</a
+        >
+      </p>
+      <p>La magia de tu fiesta comienza aquí ✨</p>
+      <p>
+        <a href="https://www.instagram.com/limalimoneventos.vb/" target="_blank"
+          >@limalimoneventos</a
+        >
+      </p>
+    </div>
+
+    <script type="text/javascript">
+      // Add sparkles when the lemon is clicked
+      const lemon = document.getElementById("lemon");
+      const sparklesContainer = document.getElementById("sparkles-container");
+
+      lemon.addEventListener("click", (event) => {
+        // Create sparkles
+        for (let i = 0; i < 10; i++) {
+          const sparkle = document.createElement("div");
+          sparkle.className = "sparkle";
+          sparkle.innerHTML = "✨";
+          sparkle.style.left = `${Math.random() * 100}%`;
+          sparkle.style.top = `${Math.random() * 100}%`;
+          sparkle.style.fontSize = `${Math.random() * 2 + 1}vw`;
+          sparklesContainer.appendChild(sparkle);
+
+          // Remove sparkle after animation ends
+          sparkle.addEventListener("animationend", () => {
+            sparkle.remove();
+          });
+        }
+      });
+
+      // Add clouds
+      const cloudsContainer = document.getElementById("clouds-container");
+
+      function createCloud() {
+        const cloud = document.createElement("div");
+        cloud.className = "cloud";
+        cloud.innerHTML = "☁️";
+        cloud.style.top = `${Math.random() * 100}%`; // Random vertical position
+        cloud.style.fontSize = `${Math.random() * 5 + 5}vw`; // Random size
+        cloud.style.animationDuration = `${Math.random() * 1 + 15}s`; // Faster speed
+        cloudsContainer.appendChild(cloud);
+
+        // Remove cloud when clicked
+        cloud.addEventListener("click", () => {
+          cloud.remove();
+        });
+
+        // Remove cloud after animation ends
+        cloud.addEventListener("animationend", () => {
+          cloud.remove();
+        });
+      }
+
+      // Create clouds at regular intervals
+      setInterval(createCloud, 2000); // More frequent clouds
+
+      function sendEmail() {
+        const data = {
+          name: document.getElementById("name")?.value,
+          email: document.getElementById("email")?.value,
+          message: document.getElementById("message")?.value,
+          message_honey: document.getElementById("message_honey")?.value?.length ? "honey" : null,
+        };
+
+        if (data.name && data.email && data.message && !data.message_honey) {
+          let headers = new Headers();
+          headers.append("Content-Type", "application/json");
+
+          const requestOptions = {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(data),
+            redirect: "follow",
+          };
+
+          // disable button
+          const button = document.getElementById("send-button");
+          button.disabled = true;
+          button.style.opacity = "0.5";
+          button.textContent = "Enviando...";
+
+          fetch("https://martingoiriz.com.ar/api/mg/contacto_limalimon.php", requestOptions)
+            .then((response) => response.json())
+            .then(({ status }) => {
+              if (status === 200) {
+                alert("Tu mensaje fue enviado. Muy pronto nos pondremos en contacto. ¡Gracias!");
+                setTimeout(() => {
+                  document
+                    .querySelectorAll("#name, #email, #message")
+                    .forEach((i) => (i.value = null));
+                  button.disabled = false;
+                  button.style.opacity = "1";
+                  button.textContent = "Enviar";
+                }, 500);
+              }
+            })
+            .catch((error) => console.log("error", error));
+        } else {
+          alert("Por favor, completá todos los campos para enviar tu mensaje");
+        }
+      }
+    </script>
+  </body>
+</html>
