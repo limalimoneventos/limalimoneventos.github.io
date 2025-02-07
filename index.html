@@ -20,6 +20,10 @@
 
     <!-- Form in the bottom-left corner -->
     <div id="form-container">
+      <div id="alertBox">
+        <div id="alertBox-text"></div>
+        <button id="button-alertBox">Ok!</button>
+      </div>
       <div id="contact-form">
         <input type="email" id="email" placeholder="Email" required />
         <input type="text" id="name" placeholder="Nombre" required />
@@ -54,28 +58,6 @@
     </div>
 
     <script type="text/javascript">
-      // Add sparkles when the lemon is clicked
-      const lemon = document.getElementById("lemon");
-      const sparklesContainer = document.getElementById("sparkles-container");
-
-      lemon.addEventListener("click", (event) => {
-        // Create sparkles
-        for (let i = 0; i < 10; i++) {
-          const sparkle = document.createElement("div");
-          sparkle.className = "sparkle";
-          sparkle.innerHTML = "✨";
-          sparkle.style.left = `${Math.random() * 100}%`;
-          sparkle.style.top = `${Math.random() * 100}%`;
-          sparkle.style.fontSize = `${Math.random() * 2 + 1}vw`;
-          sparklesContainer.appendChild(sparkle);
-
-          // Remove sparkle after animation ends
-          sparkle.addEventListener("animationend", () => {
-            sparkle.remove();
-          });
-        }
-      });
-
       // Add clouds
       const cloudsContainer = document.getElementById("clouds-container");
 
@@ -101,6 +83,25 @@
 
       // Create clouds at regular intervals
       setInterval(createCloud, 2000); // More frequent clouds
+
+      function promptWindow(message) {
+        let box = document.getElementById("alertBox");
+        let text = document.getElementById("alertBox-text");
+        let cancel = document.getElementById("button-alertBox");
+
+        box.style.display = "block";
+
+        cancel.onclick = function () {
+          box.style.display = "none";
+        };
+
+        text.textContent = message;
+
+        // make box to disappear after 5 seconds
+        setTimeout(function () {
+          box.style.display = "none";
+        }, 4000);
+      }
 
       function sendEmail() {
         const data = {
@@ -131,7 +132,9 @@
             .then((response) => response.json())
             .then(({ status }) => {
               if (status === 200) {
-                alert("Tu mensaje fue enviado. Muy pronto nos pondremos en contacto. ¡Gracias!");
+                promptWindow(
+                  "Tu mensaje fue enviado. Muy pronto nos pondremos en contacto. ¡Gracias!"
+                );
                 setTimeout(() => {
                   document
                     .querySelectorAll("#name, #email, #message")
@@ -144,7 +147,7 @@
             })
             .catch((error) => console.log("error", error));
         } else {
-          alert("Por favor, completá todos los campos para enviar tu mensaje");
+          promptWindow("Por favor, completá todos los campos para enviar tu mensaje");
         }
       }
     </script>
